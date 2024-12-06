@@ -1,9 +1,13 @@
 import os
 import librosa
 import numpy as np
+from scipy import signal
+
+b, a = signal.butter(5, 80, btype='high', analog = False, fs = 16000)
 
 def load_audio(file_path, sr=16000):
     audio, _ = librosa.load(file_path, sr=sr)
+    audio = signal.lfilter(b,a,audio)
     return audio
 
 def extract_mfcc(audio, sr=16000, n_mfcc=13, frame_length=0.025, frame_stride=0.01):
